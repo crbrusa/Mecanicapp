@@ -1,0 +1,1 @@
+Agenda eliminada. Por favor, intentar de nuevo mas adelante.

@@ -1,0 +1,1 @@
+Se recibe el vehiculo para chequear
