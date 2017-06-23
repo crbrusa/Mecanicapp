@@ -1,21 +1,51 @@
 <html>
+       <head>
 
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
 
-        <head>
                 <title>MecaniApp</title>
-                <style type="text/css">
+         <!-- Bootstrap Core CSS -->
+    <link href="<?php echo base_url(); ?>plantilla/css/bootstrap.min.css" rel="stylesheet">
 
-h1{
-    color: white;
-    text-align: center;
-    background-color: black;
-    padding: 20px;
+    <!-- Custom CSS -->
+    <link href="<?php echo base_url(); ?>plantilla/css/sb-admin.css" rel="stylesheet">
 
+    <!-- Morris Charts CSS -->
+    <link href="<?php echo base_url(); ?>plantilla/css/plugins/morris.css" rel="stylesheet">
 
-}
+    <!-- Custom Fonts -->
+    <link href="<?php echo base_url(); ?>plantilla/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
-</style>
-        </head>
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
         <body>
-        
-<h1><?php echo $title; ?></h1>
+
+<div id="wrapper">
+
+<!-- Navigation -->
+        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+
+
+				<a class="navbar-brand" href="<?php echo site_url('/mecanicapp/menu'); ?>"><?php echo $title; ?></a>
+			</div>
+
+<!-- Top Menu Items -->
+            <ul class="nav navbar-right top-nav">
+                <li class="dropdown">
+                    <a href="<?php echo site_url('/'); ?>">Cerrar Sesion</a> 
+                    
+				</li>
+            </ul>
+            

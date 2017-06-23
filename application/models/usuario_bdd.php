@@ -1,6 +1,8 @@
 <?php
 class usuario_bdd extends CI_Model {
 
+
+
         public function __construct()
         {
             $this->load->database();
@@ -19,10 +21,26 @@ class usuario_bdd extends CI_Model {
             return $query->row_array();
         }
         
-        
+         public function get_user($mail)
+    {
+
+        $query = $this->db->get_where('usuario', array('email' => $mail));
+            if ($query->num_rows() == 1){
+                return $query->row();
+
+            }
+            else{
+                return null;
+
+            }
+
+    }
+
+
          //Registro de servicios
          public function ingresar_servicio()
         {
+
             $this->load->helper('url');
 
             $data = array(
@@ -39,17 +57,38 @@ class usuario_bdd extends CI_Model {
         //Registro de ususrios
         public function ingresar_usuario($user)
         {
-            $this->load->helper('url');
 
+        $this->load->helper('url');
+        
+        // parte del bcrypt
+        $this->load->library('bcrypt');
+
+            $password = ( isset( $_POST['pass'] ) ? $_POST['pass'] : '' );
+ 
+            if ( $password ) {
+                $hash = $this->bcrypt->hash_password($password);
+
+                if ( strlen( $hash ) < 20 ) {
+                    exit( "Failed to hash new password" );
+                }
+            }
+
+//
             if(empty($user))
             {
+                //$password=$this->input->post('pass');
+                //$hash = $this->bcrypt->hash_password($password);
+
+
                 $data = array(
             'id' => Null,
             'rut' => $this->input->post('rut'),
             'nombre' => $this->input->post('nombre'),
             'apellido' => $this->input->post('apellido'),
             'email' => $this->input->post('email'),
-            'password' => $this->input->post('pass'),
+            
+            'password' => $hash,
+
             'acceso' => $this->input->post('user')
             );
 
@@ -62,7 +101,9 @@ class usuario_bdd extends CI_Model {
             'nombre' => $this->input->post('nombre'),
             'apellido' => $this->input->post('apellido'),
             'email' => $this->input->post('email'),
-            'password' => $this->input->post('pass'),
+            
+            'password' => $hash,
+            
             'acceso' => 'cliente'
             );
             }
@@ -100,7 +141,9 @@ class usuario_bdd extends CI_Model {
                 return $query->result_array();  
             } 
             
-            $query = $this->db->get_where($tabla, array('estado' => $idveh));
+            $this->db->from($tabla);
+            $this->db->where(array('estado' => $estado,'dueño'=>$idveh));
+            $query = $this->db->get();//
             return $query->result_array();
             
         }
@@ -143,12 +186,21 @@ class usuario_bdd extends CI_Model {
         }
 
         //Modifica estado de vehiculo por patente.
-        public function modifica_estado($idveh=FALSE,$estado=FALSE,$tabla=FALSE)
+        public function modifica_estado($idveh=FALSE,$estado=FALSE)
         {
             
-            $sql="update ". $tabla ." set estado='". $estado ."' where patente='". $idveh ."'";
+            $sql="update vehiculo set estado='". $estado ."' where patente='". $idveh ."'";
             $this->db->query($sql);
         }
+
+        //Modifica estado de trabajo por patente.
+        public function estado_trabajo($idveh=FALSE,$estado=FALSE)
+        {
+            
+            $sql="update trabajo set estado='". $estado ."' where patente='". $idveh ."'";
+            $this->db->query($sql);
+        }
+
 
         //Agendar vehiculo
          public function agendar_vehiculo($idveh)
@@ -191,19 +243,19 @@ class usuario_bdd extends CI_Model {
         }
 
         //Muestra los vehiculos chequeados, mas los sevicios por confirmar el cliente //trabajar aqui
-        public function trabajos_confirmados($idveh,$estado)
+        public function vehiculos_confirmados($idveh,$estado)
         {
                 
             if ($idveh === FALSE)
             {
-                $SqlInfo ="select * from servicio, trabajo where trabajo.estado='". $estado ."' and trabajo.servicio=servicio.id";
+                $SqlInfo ="select * from vehiculo, agenda where vehiculo.estado='". $estado ."' and vehiculo.patente=agenda.patente";
                 $query = $this->db->query($SqlInfo);
 
                 return $query->result_array();
             }
            
 
-            $SqlInfo ="select * from servicio, trabajo where trabajo.estado='". $estado ."' and trabajo.servicio=servicio.id and trabajo.patente='". $idveh ."'";
+            $SqlInfo ="select * from vehiculo, agenda where vehiculo.estado='". $estado ."' and vehiculo.patente=agenda.patente and vehiculo.dueño=". $idveh;
             $query = $this->db->query($SqlInfo);
 
             return $query->result_array();
@@ -242,11 +294,27 @@ class usuario_bdd extends CI_Model {
             'id' => Null,            
             'patente' => $idveh,
             'servicio' => $this->input->post('servicio'),
-            'estado' => 'confirmar'
+            'estado' => 'costear'
             );
 
             return $this->db->insert('trabajo', $data);
         }
 
+
+        public function selecion_vehiculos($iduser,$estado)
+        {
+            
+
+        }
+
+        public function selecion_trabajos($iduser,$estado,$uno)
+        {
+            
+        }
+
+        public function acepta_trabajos($idtrab,$estado)
+        {
+
+        }
 
 }

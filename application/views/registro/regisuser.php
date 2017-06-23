@@ -16,7 +16,7 @@
     <input type="text" name="email" /><br />
 
     <label for="pass">Contraseña</label>
-	<input type="text" name="pass" /><br />
+	<input type="password" name="pass" /><br />
 
 <label for="user">Usuario</label>
     <select name="user">
